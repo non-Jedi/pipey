@@ -32,7 +32,7 @@ class PipeSegment:
 
     def __init__(self, name):
         self.name = name
-        self.element
+        self.elements = list() #holds all elements of the segment
 
 
 class Node:
