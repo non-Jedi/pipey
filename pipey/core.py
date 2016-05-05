@@ -1,14 +1,14 @@
 from . import element_classes
 
 class Network:
-'''The entire network of pipes'''
+    '''The entire network of pipes'''
 
     def __init__(self):
         self.segments = list() #this will hold all PipeSegments in the Network
         self.nodes = list() #this will hold all Nodes in the Network
 
     def load(self, filename):
-    '''Creates a list of PipeSegments and Nodes from information in filename'''
+        '''Creates a list of PipeSegments and Nodes from information in filename'''
 
         with f as open(filename, 'r'):
             for line in f:
@@ -40,9 +40,19 @@ class Network:
                         current.add(list_line)
 
     def get_error(self, values):
-    '''Returns the error present in each equation for the given values'''
+        '''Returns the error present in each equation for the given values
 
-        pass
+        the length of values corresponds to the sum of PipeSegments and Nodes in
+        the Network. The first len(Network.segments) values are flows through
+        the corresponding segments. The rest are heads at the corresponding nodes.'''
+
+        for i, value in enumerate(values):
+            (self.segments+self.nodes)[i].temp_val = value
+
+        segment_errors = [segment.start.head-segment.calculate_loss(segment.temp_val)-segment.stop.head for segment in self.segments]
+        node_errors = [node.outflow + sum(node.outputs) - sum(node.inputs) for node in self.nodes]
+
+        return segment_errors+node_errors
 
 
 class PipeSegment:
@@ -50,8 +60,6 @@ class PipeSegment:
 
     def __init__(self, name):
         self.name = name
-        self.start = ''
-        self.stop = ''
         self.elements = list() #holds all elements of the segment
 
     def add(self, attributes):
@@ -70,8 +78,8 @@ class Node:
 
     def __init__(self, name):
         self.name = name
-        inputs = list()
-        outputs = list()
+        self.inputs = list() #holds all segments that flow into Node
+        self.outputs = list() #holds all segments that flow out of Node
 
     def add(self, attributes):
     '''General method for adding attributes of the node'''
