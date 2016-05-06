@@ -56,19 +56,19 @@ class Network:
 
 
 class PipeSegment:
-'''A piping segment running between nodes'''
+    '''A piping segment running between nodes'''
 
     def __init__(self, name):
         self.name = name
         self.elements = list() #holds all elements of the segment
 
     def add(self, attributes):
-    '''General method for instantiating element objects in the segment'''
+        '''General method for instantiating element objects in the segment'''
 
         self.elements.append(getattr(element_classes, attributes[0])(attributes[1:]))
 
     def calculate_loss(self, flow):
-    '''Calculates the total head loss across the segment for a given flowrate'''
+        '''Calculates the total head loss across the segment for a given flowrate'''
 
         return sum([element.calculate_loss(flow) for element in elements])
 
@@ -82,7 +82,7 @@ class Node:
         self.outputs = list() #holds all segments that flow out of Node
 
     def add(self, attributes):
-    '''General method for adding attributes of the node'''
+        '''General method for adding attributes of the node'''
 
         if attributes[0] == 'head':
             self.head = attributes[1]
