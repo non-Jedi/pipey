@@ -28,4 +28,4 @@ class Pipe(Element):
                 else: #Each column is wall thickness at a specific schedule
                     sizes[line[0]] = dict(zip(index[1:], line[1:]))
 
-        return float(sizes[nom_diam][sched])
+        return sizes[nom_diam][sched]
