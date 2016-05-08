@@ -1,4 +1,5 @@
 import csv
+import math
 
 class Element:
     '''General class for pipe elements to inherit from'''
@@ -13,8 +14,14 @@ class Pipe(Element):
         self.length = attributes[0]
         self.diameter = calculate_diameter(attributes[1:3])
 
-    def calculate_loss(self, flow):
+    #need to review code to see how information about density and viscosity best passed
+    def calculate_loss(self, flow, density, viscosity):
         '''calculates the head loss for a given flowrate'''
+        #flow in gpm, diameter in inches output in ft/sec
+        velocity = 60*0.13368*flow/((self.diameter/24)**2*math.pi())
+        #diameter in inches, velocity in ft/sec, density in lb/ft3, viscosity in cP
+        #validate the unit conversions in this formula!
+        reynolds = (self.diameter*velocity*density/viscosity)/12/6.8948/144
         
     def calculate_diameter(self, sched, nom_diam):
         '''Calculates internal diameter of pipe for a given nominal diameter'''
