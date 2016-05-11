@@ -26,7 +26,7 @@ setup(
     packages = ['pipey'],
     package_dir = {'pipey': 'pipey'},
     package_data = {'pipey' : ['data/*.csv']},
-    install_requires= [],
+    install_requires= ['pint',],
     entry_points= {
         'console_scripts': [
           'pipey = pipey.pipey_cli:main'
