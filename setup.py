@@ -24,7 +24,7 @@ setup(
           'Programming Language :: Python :: 3',],
       keywords= 'pressure pipe piping',
       packages= find_packages(exclude=['tests',]),
-      install_requires= [],
+      install_requires= ['pint',],
       entry_points= {
           'console_scripts': [
               'pipey = pipey.pipey_cli:main'
