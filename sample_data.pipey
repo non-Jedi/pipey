@@ -1,0 +1,20 @@
+segment 1
+start A
+end B
+Pipe -s 40 -d 2 in -l 100 ft
+Elbow -d 2 in -q 3
+
+segment 2
+start B
+end C
+Pipe -s 40 -d 3 in -l 50 ft
+Elbow -d 3 in -q 7
+
+segment 3
+start B
+end D
+Pipe -s 40 -d 3 in -l 20 ft
+Elbow -d 3 in -q 2
+
+node A
+head 10 bar
