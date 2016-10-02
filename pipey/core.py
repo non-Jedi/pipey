@@ -12,7 +12,7 @@ class Network:
         '''Reads in the contents of filename and converts them into a
         list-like object'''
 
-        with f as open(filename, 'r'):
+        with open(filename, 'r') as f:
             file_list = [i for i in f]
 
     def parse(self, input_list):
@@ -70,7 +70,7 @@ class Node:
 
         if attributes[0] == 'head':
             self.head = attributes[1]
-        elif attributes[0] == 'outflow'
+        elif attributes[0] == 'outflow':
             self.outflow = attributes[1]
-        elif attributes[0] == 'inflow'
+        elif attributes[0] == 'inflow':
             self.outflow = -attributes[1]
