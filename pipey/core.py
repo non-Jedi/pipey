@@ -1,13 +1,13 @@
 from . import element_classes
 from . import utils
-import pint
+from pint import UnitRegistry
 
 class Network:
     '''The entire network of pipes'''
 
     def __init__(self):
-        self.segments = list() #this will hold all PipeSegments in the Network
-        self.nodes = list() #this will hold all Nodes in the Network
+        self.segments = dict() #this will hold all PipeSegments in the Network
+        self.nodes = dict() #this will hold all Nodes in the Network
 
     def load(self, filename):
         '''Reads in the contents of filename and converts them into a
@@ -44,7 +44,19 @@ class Network:
             else:
                 current_focus.add_details(line_args)
 
+    def add_seg(self, args):
+        '''Adds piping segment to Network object as specified by
+        arguments contained in args.'''
 
+        self.segments[args[1]] = PipeSegment()
+        return self.segments[args[1]]
+
+    def add_node(self, args):
+        '''Adds node between pipe intersections as specified by
+        arguments contained in args.'''
+
+        self.nodes[args[1]] = Node()
+        return self.nodes[args[1]]
 
     def get_error(self, values):
         '''Returns the error present in each equation for the given values
@@ -65,8 +77,7 @@ class Network:
 class PipeSegment:
     '''A piping segment running between nodes'''
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self.elements = list() #holds all elements of the segment
 
     def add_details(arguments):
@@ -90,8 +101,7 @@ class PipeSegment:
 class Node:
     '''The point at which PipeSegments connect'''
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self.inputs = list() #holds all segments that flow into Node
         self.outputs = list() #holds all segments that flow out of Node
 
