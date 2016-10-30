@@ -36,7 +36,7 @@ class Network:
             # Since the input was already validated, we don't need to
             # worry about invalid input here.
             if not line_args[0]: # Checks for empty line in input
-                pass
+                current_focus = None
             elif line_args[0] == 'segment':
                 current_focus = self.add_seg(line_args)
             elif line_args[0] == 'node':
