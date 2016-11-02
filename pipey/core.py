@@ -25,6 +25,7 @@ class Network:
     def __init__(self):
         self.segments = dict() #this will hold all PipeSegments in the Network
         self.nodes = dict() #this will hold all Nodes in the Network
+        self.fluid = Fluid()
 
     def load(self, filename):
         '''Reads in the contents of filename and converts them into a
@@ -58,6 +59,8 @@ class Network:
                 current_focus = self.add_seg(line_args)
             elif line_args[0] == 'node':
                 current_focus = self.add_node(line_args)
+            elif line_args[0] == 'fluid':
+                current_focus = self.fluid
             else:
                 self.add_details(line_args)
 
@@ -157,3 +160,12 @@ class Node:
             self.outflow = attributes[1]
         elif attributes[0] == 'inflow':
             self.outflow = -attributes[1]
+
+class Fluid:
+    '''Fluid class contains the properties of the fluid such as density
+    and viscosity. The fluid may return different properties given
+    different base states'''
+
+    def __init__(self):
+        self.density = None
+        self.viscosity = None
