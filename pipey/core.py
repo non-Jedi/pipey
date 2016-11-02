@@ -104,7 +104,7 @@ class Network:
                 focus.add_ele(line_args)
 
         elif isinstance(focus, Node):
-            pass
+            focus.add_details(line_args)
 
     def get_error(self, values):
         '''Returns the error present in each equation for the given values
