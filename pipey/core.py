@@ -59,7 +59,7 @@ class Network:
             elif line_args[0] == 'node':
                 current_focus = self.add_node(line_args)
             else:
-                current_focus.add_details(line_args)
+                self.add_details(line_args)
 
     def add_seg(self, args):
         '''Adds piping segment to Network object as specified by
@@ -74,6 +74,37 @@ class Network:
 
         self.nodes[args[1]] = Node()
         return self.nodes[args[1]]
+
+    def add_details(self, focus, line_args):
+        '''When passed a PipeSegment object or Node object and a
+        list-like object describing some aspect of the segment or node,
+        this method modifies the node or segment.'''
+
+        if isinstance(focus, PipeSegment):
+            # The 'start' and 'end' keywords are special and must be
+            # handled outside of the PipeSegment class
+            if line_args[0] == 'start':
+                # Instantiate Node object if not yet created
+                if line_args[1] not in self.nodes:
+                    self.nodes[line_args[1]] = Node()
+                focus.start = self.nodes[line_args[1]]
+                # Must keep node inputs and outputs separate so that the
+                # dimensionality of flow has meaning
+                self.nodes[line_args[1]].outputs.append(focus)
+
+            elif line_args[0] == 'end':
+                # Instantiate Node object if not yet created
+                if line_args[1] not in self.nodes:
+                    self.nodes[line_args[1]] = Node()
+                focus.end = self.nodes[line_args[1]]
+                # Must keep node inputs and outputs separate so that the
+                # dimensionality of flow has meaning
+                self.nodes[line_args[1]].inputs.append(focus)
+            else:
+                focus.add_ele(line_args)
+
+        elif isinstance(focus, Node):
+            pass
 
     def get_error(self, values):
         '''Returns the error present in each equation for the given values
@@ -96,13 +127,8 @@ class PipeSegment:
 
     def __init__(self):
         self.elements = list() #holds all elements of the segment
-
-    def add_details(arguments):
-        '''If line has a special character (such as start or stop), adds
-        the appropriate details to the object. Otherwise it searches for
-        an element of the specified name to add to the pipe segment'''
-
-        pass
+        self.start = None
+        self.end = None
 
     def add_ele(self, attributes):
         '''General method for instantiating element objects in the segment'''
