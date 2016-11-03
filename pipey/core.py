@@ -130,6 +130,27 @@ class Network:
         for method, val in zip(self.unknowns, new_vals):
             method(val)
 
+    def get_errors(self):
+        '''Returns a list-like object with all errors in pressure drop
+        equations and continuity equations (in that order)'''
+        # Error for a segment is the difference between the head
+        # difference and its own pressure drop
+        seg_errors = [self.segments[i].end.head 
+                      + self.segments[i].calculate_loss() 
+                      - self.segments[i].start.head 
+                      for i in self.segments]
+
+        # Error for a node is the difference between the node's inputs
+        # and outputs (including inflows and outflows)
+        node_errors = [0]*len(self.nodes)
+        for i,n in enumerate(self.nodes):
+            n = self.nodes[n]
+            inputs = sum((pipe.flow for pipe in n.inputs))
+            outputs = sum((pipe.flow for pipe in n.outputs))
+            node_errors[i] = inputs - outputs - n.outflow
+
+        return seg_errors + node_errors
+
 class PipeSegment:
     '''A piping segment running between nodes'''
 
@@ -148,10 +169,11 @@ class PipeSegment:
 
         self.elements.append(getattr(element_classes, attributes[0])(attributes[1:]))
 
-    def calculate_loss(self, flow):
+    def calculate_loss(self):
         '''Calculates the total head loss across the segment for a given flowrate'''
 
-        return sum([element.calculate_loss(flow) for element in elements])
+        return sum([element.calculate_loss(self.flow) 
+                    for element in self.elements])
 
 
 class Node:
@@ -161,6 +183,7 @@ class Node:
         self.inputs = list() #holds all segments that flow into Node
         self.outputs = list() #holds all segments that flow out of Node
         self.head = None
+        self.outflow = None
 
     def set_val(self, new_head):
         '''Sets head attribute to new_head'''
