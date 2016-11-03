@@ -183,7 +183,7 @@ class Node:
         self.inputs = list() #holds all segments that flow into Node
         self.outputs = list() #holds all segments that flow out of Node
         self.head = None
-        self.outflow = None
+        self.outflow = 0
 
     def set_val(self, new_head):
         '''Sets head attribute to new_head'''
