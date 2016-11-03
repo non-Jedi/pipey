@@ -106,7 +106,7 @@ class Network:
             else:
                 focus.add_ele(line_args)
 
-        elif isinstance(focus, Node):
+        else: # Both Nodes and Fluids have add_details method
             focus.add_details(line_args)
 
     def get_error(self, values):
@@ -169,3 +169,9 @@ class Fluid:
     def __init__(self):
         self.density = None
         self.viscosity = None
+
+    def add_details(self, args):
+        '''Given a properly formatted list-like object, changes
+        attributes of fluid to match the given args.'''
+
+        pass
