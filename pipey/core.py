@@ -109,21 +109,26 @@ class Network:
         else: # Both Nodes and Fluids have add_details method
             focus.add_details(line_args)
 
-    def get_error(self, values):
-        '''Returns the error present in each equation for the given values
+    def find_unknowns(self):
+        '''Iterates through both self.segments and self.nodes and
+        creates a list of all values that are currently set as None
+        type'''
 
-        the length of values corresponds to the sum of PipeSegments and Nodes in
-        the Network. The first len(Network.segments) values are flows through
-        the corresponding segments. The rest are heads at the corresponding nodes.'''
+        self.unknowns = list()
 
-        for i, value in enumerate(values):
-            (self.segments+self.nodes)[i].temp_val = value
+        for seg_name in self.segments:
+            if self.segments[seg_name].flow is None:
+                self.unknowns.append(self.segments[seg_name].set_val)
 
-        segment_errors = [segment.start.head-segment.calculate_loss(segment.temp_val)-segment.stop.head for segment in self.segments]
-        node_errors = [node.outflow + sum(node.outputs) - sum(node.inputs) for node in self.nodes]
+        for node_name in self.nodes:
+            if self.nodes[node_name].head is None:
+                self.unknowns.append(self.nodes[node_name].set_val)
 
-        return segment_errors+node_errors
-
+    def set_unknowns(self, new_vals):
+        '''Iterates through the list of unknowns and sets each one to
+        the value specified in new_vals'''
+        for method, val in zip(self.unknowns, new_vals):
+            method(val)
 
 class PipeSegment:
     '''A piping segment running between nodes'''
@@ -132,6 +137,11 @@ class PipeSegment:
         self.elements = list() #holds all elements of the segment
         self.start = None
         self.end = None
+        self.flow = None
+
+    def set_val(self, new_flow):
+        '''Sets flow attribute to new_flow'''
+        self.flow = new_flow
 
     def add_ele(self, attributes):
         '''General method for instantiating element objects in the segment'''
@@ -150,6 +160,11 @@ class Node:
     def __init__(self):
         self.inputs = list() #holds all segments that flow into Node
         self.outputs = list() #holds all segments that flow out of Node
+        self.head = None
+
+    def set_val(self, new_head):
+        '''Sets head attribute to new_head'''
+        self.head = new_head
 
     def add_details(self, attributes):
         '''General method for adding attributes of the node'''
