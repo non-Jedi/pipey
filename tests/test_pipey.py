@@ -25,9 +25,9 @@ class ParsesSingleLineTestCase(unittest.TestCase):
         self.network = Network()
 
     def test_parses_segment(self):
-        self.network.parse(['segment 1'])
-        self.assertEqual(self.network.segments[0].name, '1')
+        self.network.parse([['segment', '1']])
+        self.assertEqual(self.network.segments['1'].flow, None)
 
     def test_parses_node(self):
-        self.network.parse(['node 1'])
-        self.assertEqual(self.network.nodes[0].name, '1')
+        self.network.parse([['node', '1']])
+        self.assertEqual(self.network.nodes['1'].head, None)
