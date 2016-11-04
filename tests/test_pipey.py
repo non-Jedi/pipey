@@ -16,18 +16,18 @@
 # with Pipey.  If not, see <http://www.gnu.org/licenses/>.
 
 from .context import pipey
-from pipey.core import Network
+import pipey.core as core
 import unittest
 
 class ParsesSingleLineTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.network = Network()
+        self.network = core.Network()
 
     def test_parses_segment(self):
         self.network.parse([['segment', '1']])
-        self.assertEqual(self.network.segments['1'].flow, None)
+        self.assertIsInstance(self.network.segments['1'], core.PipeSegment)
 
     def test_parses_node(self):
         self.network.parse([['node', '1']])
-        self.assertEqual(self.network.nodes['1'].head, None)
+        self.assertIsInstance(self.network.nodes['1'], core.Node)
