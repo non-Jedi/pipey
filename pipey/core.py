@@ -62,7 +62,7 @@ class Network:
             elif line_args[0] == 'fluid':
                 current_focus = self.fluid
             else:
-                self.add_details(line_args)
+                self.add_details(current_focus, line_args)
 
     def add_seg(self, args):
         '''Adds piping segment to Network object as specified by
