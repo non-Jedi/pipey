@@ -109,10 +109,14 @@ class Network:
         else: # Both Nodes and Fluids have add_details method
             focus.add_details(line_args)
 
-    def find_unknowns(self):
+    def _find_unknowns(self):
         '''Iterates through both self.segments and self.nodes and
         creates a list of all values that are currently set as None
-        type'''
+        type.
+        
+        This method should only be called once for a given Network
+        object. If called a second time, self.unknowns will be set to an
+        empty list and Network will be unable to be solved.'''
 
         self.unknowns = list()
 
@@ -124,9 +128,10 @@ class Network:
             if self.nodes[node_name].head is None:
                 self.unknowns.append(self.nodes[node_name].set_val)
 
-    def set_unknowns(self, new_vals):
+    def _set_unknowns(self, new_vals):
         '''Iterates through the list of unknowns and sets each one to
         the value specified in new_vals'''
+
         for method, val in zip(self.unknowns, new_vals):
             method(val)
 
@@ -150,6 +155,13 @@ class Network:
             node_errors[i] = inputs - outputs - n.outflow
 
         return seg_errors + node_errors
+
+    def _attempt_solution(self, new_vals):
+        '''Helper method that sets unknown values to new_vals and
+        returns the error terms for the object.'''
+
+        self._set_unknowns(new_vals)
+        return self.get_errors()
 
 class PipeSegment:
     '''A piping segment running between nodes'''
