@@ -18,6 +18,7 @@
 from . import element_classes
 from . import utils
 from pint import UnitRegistry
+from scipy import optimize
 
 class Network:
     '''The entire network of pipes'''
@@ -108,6 +109,18 @@ class Network:
 
         else: # Both Nodes and Fluids have add_details method
             focus.add_details(line_args)
+
+    def solve(self):
+        '''Solves flows and heads for network of PipeSegments and Nodes.
+        Method doesn't return anything but sets all PipeSegment.flow
+        values and Node.head values to their correct value.'''
+
+        sol = optimize.root(self._attempt_solution, [0]*len(self.unknowns), 
+                            method = 'hybr')
+        if sol.success:
+            self._set_unknowns(sol.x)
+        else:
+            raise Warning
 
     def _find_unknowns(self):
         '''Iterates through both self.segments and self.nodes and
