@@ -151,7 +151,7 @@ class Network:
     def get_errors(self):
         '''Returns a list-like object with all errors in pressure drop
         equations and continuity equations (in that order)'''
-        # Error for a segment is the difference between the head
+        # Error for a segment is the difference between the node head
         # difference and its own pressure drop
         seg_errors = [self.segments[i].end.head 
                       + self.segments[i].calculate_loss() 
