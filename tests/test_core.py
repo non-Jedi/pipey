@@ -19,10 +19,13 @@ from .context import pipey
 import pipey.core as core
 import unittest
 
-class ParsesSingleLineTestCase(unittest.TestCase):
+class NetworkTestCase(unittest.TestCase):
 
     def setUp(self):
         self.network = core.Network()
+
+    def tearDown(self):
+        del self.network
 
     def test_parses_segment(self):
         self.network.parse([['segment', '1']])
@@ -31,3 +34,5 @@ class ParsesSingleLineTestCase(unittest.TestCase):
     def test_parses_node(self):
         self.network.parse([['node', '1']])
         self.assertIsInstance(self.network.nodes['1'], core.Node)
+
+suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)

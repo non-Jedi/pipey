@@ -29,7 +29,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description= f.read()
 
 setup(
-    name = 'pipey'
+    name = 'pipey',
     version = '0.0.0.dev0',
     url = 'https://github.com/non-Jedi/pipey',
     author = 'Adam Beckmeyer',
@@ -40,6 +40,7 @@ setup(
         'Topic :: Scientific/Engineering :: Physics',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Programming Language :: Python :: 3',],
+    test_suite = 'tests.super_suite',
     keywords = 'pressure pipe piping',
     packages = ['pipey'],
     package_dir = {'pipey': 'pipey'},
