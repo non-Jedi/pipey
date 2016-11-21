@@ -27,12 +27,32 @@ class NetworkTestCase(unittest.TestCase):
     def tearDown(self):
         del self.network
 
-    def test_parses_segment(self):
+    def test_parses_segment_header(self):
         self.network.parse([['segment', '1']])
         self.assertIsInstance(self.network.segments['1'], core.PipeSegment)
 
-    def test_parses_node(self):
+    def test_parses_node_header(self):
         self.network.parse([['node', '1']])
         self.assertIsInstance(self.network.nodes['1'], core.Node)
+
+    def test_parses_empty_header(self):
+        self.network.parse([['',]])
+        self.assertDictEqual(self.network.segments, dict())
+        self.assertDictEqual(self.network.nodes, dict())
+        self.assertIsInstance(self.network.fluid, core.Fluid)
+
+    def test_parse_current_focus(self):
+        self.network.parse([['segment', '1'],
+                            ['start', 'B'],
+                            ['node', 'A'],
+                            ['head', '5.67', 'feet'],
+                            ['segment', '2'],
+                            ['end', 'A'],])
+        self.assertIs(self.network.segments['1'].start,
+                      self.network.nodes['B'])
+        self.assertAlmostEqual(self.network.nodes['A'].head.m, 
+                               5.67, places = 2)
+        self.assertIs(self.network.segments['2'].end,
+                      self.network.nodes['A'])
 
 suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
