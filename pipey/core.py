@@ -20,6 +20,8 @@ from . import utils
 from pint import UnitRegistry
 from scipy import optimize
 
+ureg = UnitRegistry()
+
 class Network:
     '''The entire network of pipes'''
 
@@ -63,6 +65,9 @@ class Network:
             elif line_args[0] == 'fluid':
                 current_focus = self.fluid
             else:
+                # Can't have the add_details method on focus method
+                # because adding start and end nodes to PipeSegments
+                # requires referencing Network.nodes
                 self.add_details(current_focus, line_args)
 
     def add_seg(self, args):
@@ -185,17 +190,23 @@ class PipeSegment:
         self.end = None
         self.flow = None
 
+    # This method exists so that PipeSegment and Node can be treated the
+    # same way by Network._find_unknowns and Network._set_unknowns
     def set_val(self, new_flow):
         '''Sets flow attribute to new_flow'''
         self.flow = new_flow
 
     def add_ele(self, attributes):
-        '''General method for instantiating element objects in the segment'''
+        '''General method for instantiating element objects in the
+        segment. `attributes` is a list-like object containing [0] the
+        name of the element and [1+] parameters for the given
+        element.'''
 
         self.elements.append(getattr(element_classes, attributes[0])(attributes[1:]))
 
     def calculate_loss(self):
-        '''Calculates the total head loss across the segment for a given flowrate'''
+        '''Calculates the total head loss across the segment for a given
+        flowrate'''
 
         return sum([element.calculate_loss(self.flow) 
                     for element in self.elements])
@@ -210,6 +221,8 @@ class Node:
         self.head = None
         self.outflow = 0
 
+    # This method exists so that PipeSegment and Node can be treated the
+    # same way by Network._find_unknowns and Network._set_unknowns
     def set_val(self, new_head):
         '''Sets head attribute to new_head'''
         self.head = new_head
