@@ -194,7 +194,7 @@ class PipeSegment:
     # same way by Network._find_unknowns and Network._set_unknowns
     def set_val(self, new_flow):
         '''Sets flow attribute to new_flow'''
-        self.flow = new_flow
+        self.flow = new_flow * ureg.gallons / ureg.minutes
 
     def add_ele(self, attributes):
         '''General method for instantiating element objects in the
@@ -219,23 +219,23 @@ class Node:
         self.inputs = list() #holds all segments that flow into Node
         self.outputs = list() #holds all segments that flow out of Node
         self.head = None
-        self.outflow = 0
+        self.outflow = 0 * ureg.gallons / ureg.minutes
 
     # This method exists so that PipeSegment and Node can be treated the
     # same way by Network._find_unknowns and Network._set_unknowns
     def set_val(self, new_head):
         '''Sets head attribute to new_head'''
-        self.head = new_head
+        self.head = new_head * ureg.feet
 
     def add_details(self, attributes):
         '''General method for adding attributes of the node'''
 
         if attributes[0] == 'head':
-            self.head = attributes[1]
+            self.head = float(attributes[1]) * ureg.parse_expression(attributes[2])
         elif attributes[0] == 'outflow':
-            self.outflow = attributes[1]
+            self.outflow = float(attributes[1]) * ureg.parse_expression(attributes[2])
         elif attributes[0] == 'inflow':
-            self.outflow = -attributes[1]
+            self.outflow = -float(attributes[1]) * ureg.parse_expression(attributes[2])
 
 class Fluid:
     '''Fluid class contains the properties of the fluid such as density
