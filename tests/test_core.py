@@ -16,8 +16,7 @@
 # with Pipey.  If not, see <http://www.gnu.org/licenses/>.
 
 from .context import pipey
-from .derived_test_classes import PipeSegmentTest as TestSeg
-from .derived_test_classes import NodeTest as TestNode
+from . import dummy_classes
 import pipey.core as core
 import unittest
 
@@ -116,7 +115,7 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(nd.inputs[0], focus)
         
     def test_add_details_seg_ele(self):
-        focus = TestSeg()
+        focus = dummy_classes.PipeSegmentTest()
         input_list = ['element', 'param1', 'param2']
 
         self.network.add_details(focus, input_list)
@@ -125,7 +124,7 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(focus.add_ele_val, input_list)
 
     def test_add_details_node(self):
-        focus = TestNode()
+        focus = dummy_classes.NodeTest()
         input_list = ['head', '10', 'feet']
 
         self.network.add_details(focus, input_list)
