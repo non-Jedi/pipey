@@ -19,8 +19,12 @@ from .context import pipey
 from . import dummy_classes
 import pipey.core as core
 import unittest
+from pint import UnitRegistry
+
+ureg = UnitRegistry()
 
 class NetworkTestCase(unittest.TestCase):
+    '''Runs units tests on all methods of Network class.'''
 
     def setUp(self):
         self.network = core.Network()
@@ -130,5 +134,35 @@ class NetworkTestCase(unittest.TestCase):
         self.network.add_details(focus, input_list)
 
         self.assertIs(focus.add_details_val, input_list)
+
+    def test_solve(self):
+        '''Unfortunately this unit test also tests _attempt_solution
+        method since that method cannot reasonably be decoupled from
+        solve method.'''
+
+        pass # fixme: this test still must be developed
+
+    def test__find_unknowns(self):
+        # Create network elements
+        self.network.nodes['A'] = core.Node()
+        self.network.segments['1'] = core.PipeSegment()
+        self.network.nodes['B'] = core.Node()
+
+        # Setup network connections
+        self.network.nodes['A'].outputs.append(self.network.segments['1'])
+        self.network.nodes['B'].inputs.append(self.network.segments['1'])
+        self.network.segments['1'].start = self.network.nodes['A']
+        self.network.segments['1'].end = self.network.nodes['B']
+
+        # Set knowns
+        self.network.nodes['A'].head = 10.0 * ureg.feet
+        self.network.nodes['B'].head = 5.0 * ureg.feet
+
+        # Run the method
+        self.network._find_unknowns()
+
+        self.assertEqual(len(self.network.unknowns), 1)
+        self.assertEqual(self.network.unknowns[0],
+                      self.network.segments['1'].set_val)
 
 suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)

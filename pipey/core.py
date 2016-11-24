@@ -133,8 +133,8 @@ class Network:
         type.
         
         This method should only be called once for a given Network
-        object. If called a second time, self.unknowns will be set to an
-        empty list and Network will be unable to be solved.'''
+        object. If called a second time, self.unknowns will be set to
+        an empty list and Network will be unable to be solved.'''
 
         self.unknowns = list()
 
