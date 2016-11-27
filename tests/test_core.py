@@ -25,32 +25,38 @@ ureg = UnitRegistry()
 
 class NetworkTestCase(unittest.TestCase):
     '''Runs units tests on all methods of Network class.'''
-
     def setUp(self):
+        '''Creates core.Network object to be tested'''
         self.network = core.Network()
 
     def tearDown(self):
+        '''Destroys test object'''
         del self.network
 
     def test_init(self):
+        '''Tests that test object initialized correctly'''
         empty_dict = dict()
         self.assertDictEqual(self.network.segments, empty_dict)
         self.assertDictEqual(self.network.nodes, empty_dict)
 
     def test_parses_segment_header(self):
+        '''Tests parse method of core.Network with segment header'''
         self.network.parse([['segment', '1']])
         self.assertIsInstance(self.network.segments['1'], core.PipeSegment)
 
     def test_parses_node_header(self):
+        '''Tests parse method of core.Network with node header'''
         self.network.parse([['node', '1']])
         self.assertIsInstance(self.network.nodes['1'], core.Node)
 
     def test_parses_empty_header(self):
+        '''Tests parse method of core.Network with empty line'''
         self.network.parse([['',]])
         self.assertDictEqual(self.network.segments, dict())
         self.assertDictEqual(self.network.nodes, dict())
 
     def test_parse_current_focus(self):
+        '''Tests that parse method of core.Network correctly switches focus'''
         self.network.parse([['segment', '1'],
                             ['start', 'B'],
                             ['node', 'A'],
@@ -65,16 +71,24 @@ class NetworkTestCase(unittest.TestCase):
                       self.network.nodes['A'])
 
     def test_add_seg(self):
+        '''Tests method of core.Network: add_seg'''
         focus = self.network.add_seg(['segment', 'A'])
         self.assertIs(self.network.segments['A'], focus)
         self.assertIsInstance(focus, core.PipeSegment)
 
     def test_add_node(self):
+        '''Tests method of core.Network: add_node'''
         focus = self.network.add_node(['node', 'A'])
         self.assertIs(self.network.nodes['A'], focus)
         self.assertIsInstance(focus, core.Node)
 
     def test_add_details_seg_start_new(self):
+        '''Tests method of core.Network: add_details.
+
+        Tests that add_details method correctly handles the situation
+        where the details reference a node that doesn't exist. This test
+        is against adding a segment start.
+        '''
         focus = core.PipeSegment()
         # Check that nodes dict is empty before function runs
         self.assertDictEqual(self.network.nodes, dict())
@@ -86,6 +100,12 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(self.network.nodes['A'].outputs[0], focus)
 
     def test_add_details_seg_start_old(self):
+        '''Tests method of core.Network: add_details.
+
+        Tests that add_details method correctly handles the situation
+        where the details reference a node that already exists. This
+        test is against adding a segment start.
+        '''
         focus = core.PipeSegment()
         # Use nd to make sure that node 'A' doesn't change
         nd = self.network.nodes['A'] = core.Node()
@@ -97,6 +117,12 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(nd.outputs[0], focus)
 
     def test_add_details_seg_end_new(self):
+        '''Tests method of core.Network: add_details.
+
+        Tests that add_details method correctly handles the situation
+        where the details reference a node that does not exist. This
+        test is against adding a segment end.
+        '''
         focus = core.PipeSegment()
         # Check that nodes dict is empty before function runs
         self.assertDictEqual(self.network.nodes, dict())
@@ -108,6 +134,12 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(self.network.nodes['A'].inputs[0], focus)
 
     def test_add_details_seg_end_old(self):
+        '''Tests method of core.Network: add_details.
+
+        Tests that add_details method correctly handles the situation
+        where the details reference a node that already exists. This
+        test is against adding a segment end.
+        '''
         focus = core.PipeSegment()
         # Use nd to make sure that node 'A' doesn't change
         nd = self.network.nodes['A'] = core.Node()
@@ -119,6 +151,11 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(nd.inputs[0], focus)
         
     def test_add_details_seg_ele(self):
+        '''Tests method of core.Network: add_details.
+
+        Tests that add_details correctly handles adding a new element to
+        a core.PipeSegment.
+        '''
         focus = dummy_classes.PipeSegmentTest()
         input_list = ['element', 'param1', 'param2']
 
@@ -128,6 +165,7 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(focus.add_ele_val, input_list)
 
     def test_add_details_node(self):
+        '''Tests adding node with method of core.Network: add_details.'''
         focus = dummy_classes.NodeTest()
         input_list = ['head', '10', 'feet']
 
@@ -136,13 +174,16 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(focus.add_details_val, input_list)
 
     def test_solve(self):
-        '''Unfortunately this unit test also tests _attempt_solution
-        method since that method cannot reasonably be decoupled from
-        solve method.'''
+        '''Tests method of core.Network: solve.
 
+        Unfortunately this unit test also tests _attempt_solution method
+        since that method cannot reasonably be decoupled from solve
+        method.
+        '''
         pass # fixme: this test still must be developed
 
     def test__find_unknowns(self):
+        '''Tests method core.Network: _find_unknowns'''
         # Create network elements
         self.network.nodes['A'] = core.Node()
         self.network.segments['1'] = core.PipeSegment()
@@ -164,5 +205,14 @@ class NetworkTestCase(unittest.TestCase):
         self.assertEqual(len(self.network.unknowns), 1)
         self.assertEqual(self.network.unknowns[0],
                       self.network.segments['1'].set_val)
+
+    def test__set_unknowns(self):
+        '''Tests method of core.Network: _set_unknowns'''
+        test_list = list()
+        self.network.unknowns = [test_list.append]
+
+        self.network._set_unknowns([5.3])
+
+        self.assertAlmostEqual(5.3, test_list[0], places = 3)
 
 suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
