@@ -240,4 +240,18 @@ class NetworkTestCase(unittest.TestCase):
         self.assertEqual(abs(errors[1]), 10)
         self.assertEqual(abs(errors[2]), 10)
 
+    def test__attempt_solution(self):
+        '''Tests method of core.Network: _attempt_solution
+
+        This test will fail if _set_unknowns is functioning incorrectly.
+        '''
+        test_list = list()
+        self.network.unknowns = [test_list.append]
+        self.network.get_errors = lambda : 5
+
+        test_errors = self.network._attempt_solution([6.3])
+
+        self.assertAlmostEqual(6.3, test_list[0], places=3)
+        self.assertEqual(test_errors, 5)
+
 suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
