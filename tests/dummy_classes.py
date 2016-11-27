@@ -29,6 +29,7 @@ class PipeSegmentTest(core.PipeSegment):
         self.add_ele_val = input_val
     def calculate_loss(self):
         self.calculate_loss_val = True
+        return 10
 
 class NodeTest(core.Node):
     def __init__(self):

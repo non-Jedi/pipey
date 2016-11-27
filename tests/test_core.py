@@ -207,12 +207,37 @@ class NetworkTestCase(unittest.TestCase):
                       self.network.segments['1'].set_val)
 
     def test__set_unknowns(self):
-        '''Tests method of core.Network: _set_unknowns'''
+        '''Tests method of core.Network: _set_unknowns.'''
         test_list = list()
         self.network.unknowns = [test_list.append]
 
         self.network._set_unknowns([5.3])
 
         self.assertAlmostEqual(5.3, test_list[0], places = 3)
+
+    def test_get_errors(self):
+        '''Tests method of core.Network: get_errors.'''
+        seg = self.network.segments['1'] = dummy_classes.PipeSegmentTest()
+        node_A = self.network.nodes['A'] = core.Node()
+        node_B = self.network.nodes['B'] = core.Node()
+
+        seg.start = node_A
+        seg.end = node_B
+        node_A.outputs.append(seg)
+        node_B.inputs.append(seg)
+
+        # Have to use plain numbers without units with all of these to
+        # avoid issues with incompatible UnitRegistrys.
+        node_A.head = 100
+        node_A.outflow = 0
+        node_B.head = 50
+        node_B.outflow = 0
+        seg.flow = 10
+
+        errors = self.network.get_errors()
+
+        self.assertEqual(errors[0], -40)
+        self.assertEqual(abs(errors[1]), 10)
+        self.assertEqual(abs(errors[2]), 10)
 
 suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
