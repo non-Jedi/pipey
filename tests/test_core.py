@@ -174,13 +174,15 @@ class NetworkTestCase(unittest.TestCase):
         self.assertIs(focus.add_details_val, input_list)
 
     def test_solve(self):
-        '''Tests method of core.Network: solve.
+        '''Tests method of core.Network: solve.'''
+        self.solve_network = dummy_classes.DummyNetworkSolve()
 
-        Unfortunately this unit test also tests _attempt_solution method
-        since that method cannot reasonably be decoupled from solve
-        method.
-        '''
-        pass # fixme: this test still must be developed
+        self.solve_network.solve()
+
+        solve_solution = list(self.solve_network.segments) # See dummy class
+        self.assertListEqual(solve_solution, [2, 1])
+
+        del self.solve_network
 
     def test__find_unknowns(self):
         '''Tests method core.Network: _find_unknowns'''

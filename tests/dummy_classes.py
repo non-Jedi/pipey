@@ -39,3 +39,11 @@ class NodeTest(core.Node):
         self.set_val_val = input_val
     def add_details(self, input_val):
         self.add_details_val = input_val
+
+class DummyNetworkSolve(core.Network):
+    def _attempt_solution(self, x):
+        return [x[0] - 2*x[1],
+                2 - x[0]]
+    def _set_unknowns(self, solution_input):
+        self.segments = solution_input
+    unknowns = [0]*2
