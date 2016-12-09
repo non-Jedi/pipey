@@ -256,4 +256,38 @@ class NetworkTestCase(unittest.TestCase):
         self.assertAlmostEqual(6.3, test_list[0], places=3)
         self.assertEqual(test_errors, 5)
 
-suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
+class PipeSegmentTestCase(unittest.TestCase):
+    '''Runs unit tests on all methods of PipeSegment class'''
+    def setUp(self):
+        self.seg = core.PipeSegment()
+    def tearDown(self):
+        del self.seg
+
+    def test___init__(self):
+        '''Checks that PipeSegment objects are properly created'''
+        self.assertListEqual(self.seg.elements, list())
+        self.assertIs(self.seg.start, None)
+        self.assertIs(self.seg.end, None)
+        self.assertIs(self.seg.flow, None)
+
+    def test_set_val(self):
+        '''Tests method of PipeSegment: set_val'''
+        self.seg.set_val(10)
+        self.assertEqual(self.seg.flow.m, 10)
+
+    def test_add_ele(self):
+        '''Tests method of PipeSegment: add_ele.
+
+        This test uses the special Null_Element class located in pipey.element_classes.
+        '''
+        self.seg.add_ele(['Null_Element', '1', '2', '3'])
+        self.assertEqual(len(self.seg.elements), 1)
+        self.assertIsInstance(self.seg.elements[0],
+                              pipey.element_classes.Null_Element)
+        self.assertListEqual(self.seg.elements[0].stuff, ['1','2','3'])
+
+network_suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
+seg_suite = unittest.TestLoader().loadTestsFromTestCase(PipeSegmentTestCase)
+suite = unittest.TestSuite()
+suite.addTests((network_suite, seg_suite,))
+

@@ -16,7 +16,7 @@
 # with Pipey.  If not, see <http://www.gnu.org/licenses/>.
 
 from .context import pipey
-import pipey.core as core
+from pipey import core
 
 class PipeSegmentTest(core.PipeSegment):
     def __init__(self):
@@ -47,3 +47,4 @@ class DummyNetworkSolve(core.Network):
     def _set_unknowns(self, solution_input):
         self.segments = solution_input
     unknowns = [0]*2
+

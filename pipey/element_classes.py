@@ -17,12 +17,22 @@
 
 import csv
 import math
+from . import ureg
 
 class Element:
     '''General class for pipe elements to inherit from'''
 
     units = 0
     diameter = 1
+
+class Null_Element(Element):
+    '''Special class that puts all input into stuff attribute.
+
+    This class is useful for testing purposes but should not be called
+    at any point in the package's actual codebase.
+    '''
+    def __init__(self, attributes):
+        self.stuff = attributes
 
 class Pipe(Element):
     '''Total of all piping runs in segment'''

@@ -17,10 +17,8 @@
 
 from . import element_classes
 from . import utils
-from pint import UnitRegistry
+from . import ureg # pint.UnitRegistry shared with rest of package
 from scipy import optimize
-
-ureg = UnitRegistry()
 
 class Network:
     '''The entire network of pipes'''
