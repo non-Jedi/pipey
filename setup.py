@@ -33,7 +33,7 @@ setup(
     version = '0.0.0.dev0',
     url = 'https://github.com/non-Jedi/pipey',
     author = 'Adam Beckmeyer',
-    license = 'LGPLv3',
+    license = 'GPLv3',
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Engineers',
@@ -45,7 +45,9 @@ setup(
     packages = ['pipey'],
     package_dir = {'pipey': 'pipey'},
     package_data = {'pipey' : ['data/*.csv']},
-    install_requires= ['pint',],
+    install_requires= ['pint>=0.7.2',
+                       'scipy>=0.11.0',
+                      ],
     entry_points= {
         'console_scripts': [
           'pipey = pipey.pipey_cli:main'
