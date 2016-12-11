@@ -32,6 +32,8 @@ class FrictionFactorTests(unittest.TestCase):
                                delta = 0.0006)
         self.assertAlmostEqual(utils.colebrook(0.001, 1e6), 0.0199,
                                delta = 0.0006)
+        self.assertAlmostEqual(utils.colebrook(1e-05, 8e8), 0.0082,
+                               delta = 0.0006)
 
     def test_laminar_ff(self):
         '''Tests laminar_ff function versus hand calculated values.'''
