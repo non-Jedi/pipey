@@ -19,9 +19,7 @@ from .context import pipey
 from . import dummy_classes
 import pipey.core as core
 import unittest
-from pint import UnitRegistry
-
-ureg = UnitRegistry()
+from pipey import ureg
 
 class NetworkTestCase(unittest.TestCase):
     '''Runs units tests on all methods of Network class.'''
