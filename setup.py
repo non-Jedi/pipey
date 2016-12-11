@@ -38,7 +38,7 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Engineers',
         'Topic :: Scientific/Engineering :: Physics',
-        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3',],
     test_suite = 'tests.super_suite',
     keywords = 'pressure pipe piping',
