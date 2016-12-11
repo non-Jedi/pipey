@@ -286,8 +286,25 @@ class PipeSegmentTestCase(unittest.TestCase):
                               pipey.element_classes.Null_Element)
         self.assertListEqual(self.seg.elements[0].stuff, ['1','2','3'])
 
+    def test_calculate_loss(self):
+        '''Tests method of PipeSegment: calculate_loss.
+        
+        Since dummy_classes.DummyElement calculate_loss method returns
+        its input, and PipeSegment.calculate_loss sums output of
+        calculate_loss methods for PipeSegment.elements, the losses
+        returned should be len(PipeSegment.elements) * PipeSegment.flow.
+        '''
+        self.seg.flow = 2 * ureg.gallons / ureg.minutes
+
+        for elements_len in range(1,10):
+            self.seg.elements = [dummy_classes.DummyElement()] * elements_len
+            losses = self.seg.calculate_loss()
+            self.assertEqual(losses, elements_len * self.seg.flow)
+
 network_suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
 seg_suite = unittest.TestLoader().loadTestsFromTestCase(PipeSegmentTestCase)
+
+# This is the test suite imported by __init__.py
 suite = unittest.TestSuite()
 suite.addTests((network_suite, seg_suite,))
 

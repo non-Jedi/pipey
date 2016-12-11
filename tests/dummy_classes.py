@@ -17,6 +17,7 @@
 
 from .context import pipey
 from pipey import core
+from pipey import element_classes
 
 class PipeSegmentTest(core.PipeSegment):
     def __init__(self):
@@ -48,3 +49,7 @@ class DummyNetworkSolve(core.Network):
         self.segments = solution_input
     unknowns = [0]*2
 
+class DummyElement(element_classes.Element):
+    '''PipeSegment element whose calculate_loss method returns input flow'''
+    def calculate_loss(self, input_flow):
+        return input_flow
