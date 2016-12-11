@@ -17,6 +17,21 @@
 # You should have received a copy of the GNU General Public License along
 # with Pipey.  If not, see <http://www.gnu.org/licenses/>.
 
+from math import sqrt, log
+from scipy import optimize
+
 def check_formatting(list_input):
 
     pass
+
+def colebrook(relative_roughness, reynolds):
+    '''Returns colebrook approximation of friction factor'''
+    colebrook_zero = lambda f: 1/sqrt(f[0]) + 2.0 * log(relative_roughness/3.7 +
+                                                        2.51/reynolds/sqrt(f[0]), 10)
+
+    f_result = optimize.root(colebrook_zero, [0.040], tol = 0.00001)
+    if f_result.success:
+        return f_result.x[0]
+    else:
+        raise optimize.OptimizeWarning(f_result.message)
+
