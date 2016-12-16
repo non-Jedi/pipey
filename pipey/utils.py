@@ -19,6 +19,8 @@
 
 from math import sqrt, log
 from scipy import optimize
+import pint
+from . import ureg
 
 def check_formatting(list_input):
 
@@ -34,4 +36,11 @@ def colebrook(relative_roughness, reynolds):
         return abs(f_result.x[0])
     else:
         raise optimize.OptimizeWarning(f_result.message)
+
+def reynolds(rho, d, v, mu):
+    reynolds = rho * d * v / mu
+    if reynolds.to_base_units().u == ureg.dimensionless:
+        return reynolds.to_base_units()
+    else:
+        raise pint.errors.DimensionalityError("Dimensions don't cancel")
 
