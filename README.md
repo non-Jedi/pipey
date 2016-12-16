@@ -27,19 +27,20 @@ fittings.
 ## Input format
 
 Pipey reads text files (which may have the filename extension .pipey).
-The first token on the first line of a text block denotes the object
-the text block describes (segment or node). The second token (may be
-only a character) denotes the name of the object. For simple cases, a
-convention of a single number for segments and single capital letter
-for nodes should be used.
+The first token (tokens are separated by a single space) on the first
+line of a text block denotes the object the text block describes
+(segment or node). The second token (may be only a character) denotes
+the name of the object. For simple cases, a convention of a single
+number for segments and single capital letter for nodes should be
+used.
 
 The rest of a object's text block follows a convention where the first
 token in a line calls a property of the object by name and the
 remainder of the line describes values of that property.
 
-The convention is that capitalized property names indicate some element
-of a pipe segment through which fluid may flow (such as "Pipe",
-"Orifice", or "Elbow")
+The convention is that capitalized property names indicate some
+element of a pipe segment through which fluid may flow (such as
+"Pipe", "Orifice", or "Elbow")
 
 ### Segment Properties
 
@@ -53,23 +54,23 @@ be moving from "start".
 
 ##### end
 
-The "end" property of a segment is the other node to which a segment is
-connected. Any directionally specified properties shall be assumed to
-be moving to "end".
+The "end" property of a segment is the other node to which a segment
+is connected. Any directionally specified properties shall be assumed
+to be moving to "end".
 
 #### Element properties
 
 At this time, the only available element properties are those included
-with the pipey package. A planned feature of the project's architecture
-is to allow allow custom piping elements, but it has not yet been
-implemented.
+with the pipey package. A planned feature of the project's
+architecture is to allow allow custom piping elements, but it has not
+yet been implemented.
 
 ##### Pipe
 
 Pipe describes a straight length of pipe or tubing. 
 
-* The tag "-s" indicates that the next token will be the pipe element's
-	numerical schedule (schedule 40, schedule 80, etc.).
+* The tag "-s" indicates that the next token will be the pipe
+	element's numerical schedule (schedule 40, schedule 80, etc.).
 * The tag "-l" indicates that the next two tokens will be interpreted
 	as the pipe element's numerical length followed by the units used
 	(feet, in, m, meters, etc.).
@@ -108,5 +109,5 @@ If this quantity is unknown please see the _unknown_ property.
 #### outflow
 
 If the first token after unknown is outflow pipey will assume that a
-node's outflow is equal to its input flows minus its output flows. This
-is useful if there is a tank accumulating fluid at a node.
+node's outflow is equal to its input flows minus its output flows.
+This is useful if there is a tank accumulating fluid at a node.
