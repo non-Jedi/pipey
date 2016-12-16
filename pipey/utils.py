@@ -23,7 +23,6 @@ import pint
 from . import ureg
 
 def check_formatting(list_input):
-
     pass
 
 def colebrook(relative_roughness, reynolds):
@@ -39,6 +38,7 @@ def colebrook(relative_roughness, reynolds):
         raise optimize.OptimizeWarning(f_result.message)
 
 def reynolds(rho, d, v, mu):
+    '''Returns reynolds number.'''
     reynolds = rho * d * v / mu
     if reynolds.to_base_units().u == ureg.dimensionless:
         return reynolds.to_base_units()
