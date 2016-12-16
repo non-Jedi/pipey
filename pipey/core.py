@@ -47,11 +47,9 @@ class Network:
         
         The results of this parsing will be appended to self.segments
         and self.nodes.'''
-
         # Iterate through entire list to make sure all file contents
         # added to object.
         for line_args in input_list:
-
             # Since the input was already validated, we don't need to
             # worry about invalid input here.
             if not line_args[0]: # Checks for empty line in input
@@ -71,14 +69,12 @@ class Network:
     def add_seg(self, args):
         '''Adds piping segment to Network object as specified by
         arguments contained in args.'''
-
         self.segments[args[1]] = PipeSegment()
         return self.segments[args[1]]
 
     def add_node(self, args):
         '''Adds node between pipe intersections as specified by
         arguments contained in args.'''
-
         self.nodes[args[1]] = Node()
         return self.nodes[args[1]]
 
@@ -86,7 +82,6 @@ class Network:
         '''When passed a PipeSegment object or Node object and a
         list-like object describing some aspect of the segment or node,
         this method modifies the node or segment.'''
-
         if isinstance(focus, PipeSegment):
             # The 'start' and 'end' keywords are special and must be
             # handled outside of the PipeSegment class
@@ -117,9 +112,7 @@ class Network:
         '''Solves flows and heads for network of PipeSegments and Nodes.
         Method doesn't return anything but sets all PipeSegment.flow
         values and Node.head values to their correct value.'''
-
-        sol = optimize.root(self._attempt_solution, [0]*len(self.unknowns), 
-                            method = 'hybr')
+        sol = optimize.root(self._attempt_solution, [0]*len(self.unknowns), method = 'hybr')
         if sol.success:
             self._set_unknowns(sol.x)
         else:
@@ -133,7 +126,6 @@ class Network:
         This method should only be called once for a given Network
         object. If called a second time, self.unknowns will be set to
         an empty list and Network will be unable to be solved.'''
-
         self.unknowns = list()
 
         for seg_name in self.segments:
@@ -147,7 +139,6 @@ class Network:
     def _set_unknowns(self, new_vals):
         '''Iterates through the list of unknowns and sets each one to
         the value specified in new_vals'''
-
         for method, val in zip(self.unknowns, new_vals):
             method(val)
 
@@ -175,13 +166,11 @@ class Network:
     def _attempt_solution(self, new_vals):
         '''Helper method that sets unknown values to new_vals and
         returns the error terms for the object.'''
-
         self._set_unknowns(new_vals)
         return self.get_errors()
 
 class PipeSegment:
     '''A piping segment running between nodes'''
-
     def __init__(self):
         self.elements = list() #holds all elements of the segment
         self.start = None
@@ -212,7 +201,6 @@ class PipeSegment:
 
 class Node:
     '''The point at which PipeSegments connect'''
-
     def __init__(self):
         self.inputs = list() #holds all segments that flow into Node
         self.outputs = list() #holds all segments that flow out of Node
@@ -239,7 +227,6 @@ class Fluid:
     '''Fluid class contains the properties of the fluid such as density
     and viscosity. The fluid may return different properties given
     different base states'''
-
     def __init__(self):
         self.density = None
         self.viscosity = None
@@ -247,5 +234,5 @@ class Fluid:
     def add_details(self, args):
         '''Given a properly formatted list-like object, changes
         attributes of fluid to match the given args.'''
-
         pass
+
