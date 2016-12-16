@@ -58,8 +58,19 @@ class FrictionFactorTests(unittest.TestCase):
         self.assertAlmostEqual(utils.friction_factor(1999), 31.234375,
                                delta = 0.0006)
 
+class TestReynolds(unittest.TestCase):
+    '''Tests calculation of reynolds number.'''
+    def runTest(self):
+        rho = 4 * ureg.kg / ureg.gallons
+        l = 6 * ureg.feet
+        v = 5 * ureg.meters / ureg.second
+        mu = 5 * ureg.centipoise
+        self.assertAlmostEqual(utils.reynolds(rho, l, v, mu).to_base_units().m,
+                               1932471.397, places = 5)
+
 ff_suite = unittest.TestLoader().loadTestsFromTestCase(FrictionFactorTests)
+r_suite = unittest.TestLoader().loadTestsFromTestCase(TestReynolds)
 
 suite = unittest.TestSuite()
-suite.addTests((ff_suite,))
+suite.addTests((ff_suite, r_suite,))
 
