@@ -299,10 +299,45 @@ class PipeSegmentTestCase(unittest.TestCase):
             losses = self.seg.calculate_loss()
             self.assertEqual(losses, elements_len * self.seg.flow)
 
+class NodeTestCase(unittest.TestCase):
+    '''Runs unit tests for Node class.'''
+    def setUp(self):
+        self.node = core.Node()
+    def tearDown(self):
+        del self.node
+
+    def test___init__(self):
+        '''Tests initialization of Node object.'''
+        self.assertListEqual(self.node.inputs, list())
+        self.assertListEqual(self.node.outputs, list())
+        self.assertIs(self.node.head, None)
+        self.assertEqual(self.node.outflow.m, 0)
+
+    def test_set_val(self):
+        '''Tests set_val method of Node class.'''
+        self.node.set_val(5)
+        self.assertEqual(self.node.head.m, 5)
+        self.assertEqual(self.node.head.u, ureg.feet)
+
+    def test_add_details(self):
+        '''Tests adding method add_details of Node class.'''
+        self.node.add_details(['head', '2.5', 'meters'])
+        self.assertAlmostEqual(self.node.head.m, 2.5, places = 5)
+        self.assertEqual(self.node.head.u, ureg.meters)
+
+        self.node.add_details(['outflow', '500', 'gpm'])
+        self.assertAlmostEqual(self.node.outflow.m, 500, places = 5)
+        self.assertEqual(self.node.outflow.to_base_units().u, ureg.m**3 / ureg.sec)
+
+        self.node.add_details(['inflow', '50', 'gpm'])
+        self.assertAlmostEqual(self.node.outflow.m, -50, places = 5)
+        self.assertEqual(self.node.outflow.to_base_units().u, ureg.m**3 / ureg.sec)
+
 network_suite = unittest.TestLoader().loadTestsFromTestCase(NetworkTestCase)
 seg_suite = unittest.TestLoader().loadTestsFromTestCase(PipeSegmentTestCase)
+node_suite = unittest.TestLoader().loadTestsFromTestCase(NodeTestCase)
 
 # This is the test suite imported by __init__.py
 suite = unittest.TestSuite()
-suite.addTests((network_suite, seg_suite,))
+suite.addTests((network_suite, seg_suite, node_suite,))
 
