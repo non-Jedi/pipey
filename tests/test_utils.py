@@ -65,8 +65,8 @@ class TestReynolds(unittest.TestCase):
         l = 6 * ureg.feet
         v = 5 * ureg.meters / ureg.second
         mu = 5 * ureg.centipoise
-        self.assertAlmostEqual(utils.reynolds(rho, l, v, mu).to_base_units().m,
-                               1932471.397, places = 5)
+        self.assertAlmostEqual(utils.reynolds(rho, l, v, mu).m,
+                               1932471.397, places = 3)
 
 ff_suite = unittest.TestLoader().loadTestsFromTestCase(FrictionFactorTests)
 r_suite = unittest.TestLoader().loadTestsFromTestCase(TestReynolds)
