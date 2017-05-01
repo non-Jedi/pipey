@@ -24,6 +24,11 @@ with Pipey.  If not, see <http://www.gnu.org/licenses/>.
 Simple python package for calculating pressure drop through pipes and
 fittings.
 
+## Status
+
+Unmaintained, unfinished and unusable. I hope to return to this package again at
+a later time, but it is not a priority for me right now.
+
 ## Input format
 
 Pipey reads text files (which may have the filename extension .pipey).
